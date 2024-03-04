@@ -9,6 +9,7 @@ class Creators(models.Model):
     """
     the creator class
     """
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     company_name = models.CharField(max_length=100, blank=True, default='')
     email = models.EmailField()

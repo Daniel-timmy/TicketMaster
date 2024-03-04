@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
+from ticketmaster.creators.models import Creators
+
 """
 Defines the model for reservations
 """
@@ -13,6 +15,8 @@ class Reservations(models.Model):
     working spaces and other places that have groups which have
     slots.
     """
+    id = models.BigAutoField(primary_key=True)
+    creator = models.ForeignKey(Creators, on_delete=models.CASCADE)
     reservation_name = models.CharField(max_length=100)
     groups = ArrayField(models.CharField(max_length=30, blank=True))
     spaces_per_group = ArrayField(models.CharField(max_length=10, blank=True))
@@ -36,6 +40,8 @@ class ReservationBookings(models.Model):
     Class that defines the amount of bookings made by users on a
     particular reservation
     """
+    id = models.BigAutoField(primary_key=True)
+    reservation = models.ForeignKey(Reservations, on_delete=models.CASCADE)
     customer_name = models.CharField()
     email = models.EmailField()
     alpha_numeric = models.CharField()
