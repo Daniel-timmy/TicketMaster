@@ -51,8 +51,6 @@ FEATURES
 
 12. **Security and Fraud Prevention**: Robust security measures to protect sensitive customer data, prevent fraudulent activities such as ticket scalping and unauthorized access, and ensure compliance with data protection regulations.
 
-By incorporating these features, a ticketing platform can provide a comprehensive solution for event organizers to plan, promote, and manage successful events while offering a seamless ticket purchasing experience for attendees.
-
 
 ## Contact
 
