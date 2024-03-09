@@ -1,9 +1,11 @@
 import uuid
 
+from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-
-
+from backend.ticketmaster.creator.models import Creator
+from creator.models import Creator
 """
 Defines the model for reservations
 """
@@ -18,7 +20,6 @@ class Reservation(models.Model):
     """
     id = models.UUIDField(default=uuid.uuid4, unique=True,
                           primary_key=True, editable=False)
-    # creator = models.ForeignKey(Creators, on_delete=models.CASCADE)
     reservation_name = models.CharField(max_length=100)
     groups = ArrayField(models.CharField(max_length=30, blank=True))
     spaces_per_group = ArrayField(models.CharField(max_length=10, blank=True))
@@ -36,6 +37,10 @@ class Reservation(models.Model):
     online_event = models.BooleanField()
     description = models.CharField()
 
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.UUIDField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
 
 class ReservationBooking(models.Model):
     """
@@ -49,7 +54,7 @@ class ReservationBooking(models.Model):
     customer_name = models.CharField()
     email = models.EmailField()
     alpha_numeric = models.CharField()
-    QR_code = models.CharField()
+    QR_code = models.TextField()
     start_date = models.DateField()
     start_time = models.TimeField()
     end_date = models.DateField()

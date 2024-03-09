@@ -44,7 +44,7 @@ class EventBooking(models.Model):
     customer_name = models.CharField()
     email = models.EmailField()
     alpha_numeric = models.CharField()
-    QR_code = models.CharField()
+    QR_code = models.TextField()
     start_date = models.DateField()
     start_time = models.TimeField()
     end_date = models.DateField()

@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .models import Event, EventBooking
 from .serializer import EventSerializer, EventBookingSerializer
+from .permissions import IsCreatorOrReadOnly
 """
 This module define the CRUD operations of the API for events
 """
@@ -20,6 +21,7 @@ class EventDetail(generics.RetrieveUpdateDestroyAPIView):
     EventDetail class defines an API endpoint for handling HTTP GET, PUT, and DELETE requests
     on a single event instance.
     """
+    permission_classes = (IsCreatorOrReadOnly,)
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
