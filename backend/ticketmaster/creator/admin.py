@@ -1,5 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.db import models
+from django.contrib.admin.models import LogEntry
+from django.contrib.contenttypes.models import ContentType
+from django.utils.translation import gettext_lazy as _
 
 from .models import Creator
 
@@ -27,4 +31,13 @@ class CreatorAdmin(UserAdmin):
     ordering = ('email',)
 
 
+# class CustomLogEntry(LogEntry):
+#     user_uuid = models.UUIDField(_('user UUID'), blank=True, null=True)
+#
+#     class Meta:
+#         verbose_name = _('log entry')
+#         verbose_name_plural = _('log entries')
+
+
 admin.site.register(Creator, CreatorAdmin)
+# admin.site.register(CustomLogEntry)

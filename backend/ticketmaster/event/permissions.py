@@ -22,5 +22,7 @@ class IsCreatorOrReadOnly(permissions.BasePermission):
         """
         if request.method in permissions.SAFE_METHODS:
             return True
+        elif request.method == 'POST':
+            return request.user.is_authenticated
 
         return obj.creator == request.user

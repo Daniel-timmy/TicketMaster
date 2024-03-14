@@ -34,7 +34,7 @@ class ReservationSerializer(serializers.ModelSerializer):
             "venue_country",
             "online_event",
             "description",
-            "reservation_booking"
+            "reservation_booking",
         )
 
 

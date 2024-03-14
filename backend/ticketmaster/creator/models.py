@@ -55,8 +55,7 @@ class Creator(AbstractBaseUser, PermissionsMixin):
     """
     the creator class
     """
-    id = models.UUIDField(default=uuid.uuid4, unique=True,
-                          primary_key=True, editable=False)
+    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     name = models.CharField(max_length=100)
     company_name = models.CharField(max_length=100, blank=True, default='')
     email = models.EmailField(unique=True)
@@ -64,7 +63,6 @@ class Creator(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    # reservations = GenericRelation(Reservation)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

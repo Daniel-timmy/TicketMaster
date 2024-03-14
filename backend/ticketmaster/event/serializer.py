@@ -31,7 +31,8 @@ class EventSerializer(serializers.ModelSerializer):
                   'online_event',
                   'recurring_event',
                   'description',
-                  'event_type')
+                  'event_booking',
+                  )
 
 
 class EventBookingSerializer(serializers.ModelSerializer):
@@ -47,6 +48,7 @@ class EventBookingSerializer(serializers.ModelSerializer):
             'id',
             'customer_name',
             'email',
+            'event',
             'alpha_numeric',
             'QR_code',
             'start_date',

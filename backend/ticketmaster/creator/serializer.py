@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from .models import Creator
-# from ticketmaster.events.models import Events
-# from .reservations.models import Reservations
 
 """
 """

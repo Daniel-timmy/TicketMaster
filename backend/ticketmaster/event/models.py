@@ -1,10 +1,7 @@
 import uuid
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-
-
 """
 Defines the model for event
 """
@@ -18,9 +15,10 @@ class Event(models.Model):
     """
     id = models.UUIDField(default=uuid.uuid4, unique=True,
                           primary_key=True, editable=False)
-    # creator = models.ForeignKey(Creators, on_delete=models.CASCADE())
+    creator = models.ForeignKey(get_user_model(),default=None, on_delete=models.CASCADE)
     event_name = models.CharField(max_length=100)
     tickets = ArrayField(models.CharField(max_length=512))
+    email = models.EmailField(unique=True, default=None)
     start_date = models.DateField()
     start_time = models.TimeField()
     end_date = models.DateField()
@@ -42,7 +40,7 @@ class EventBooking(models.Model):
                           primary_key=True, editable=False)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, default=None)
     customer_name = models.CharField()
-    email = models.EmailField()
+    email = models.EmailField(unique=True, default=None)
     alpha_numeric = models.CharField()
     QR_code = models.TextField()
     start_date = models.DateField()

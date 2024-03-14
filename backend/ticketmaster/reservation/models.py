@@ -1,11 +1,10 @@
 import uuid
 
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericRelation, GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from backend.ticketmaster.creator.models import Creator
-from creator.models import Creator
 """
 Defines the model for reservations
 """
@@ -23,7 +22,9 @@ class Reservation(models.Model):
     reservation_name = models.CharField(max_length=100)
     groups = ArrayField(models.CharField(max_length=30, blank=True))
     spaces_per_group = ArrayField(models.CharField(max_length=10, blank=True))
+    email = models.EmailField(unique=True, default=None)
     recurring_event = models.BooleanField()
+    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=None)
     # TODO: replicate this on the customer's side
     start_date = models.DateField()
     start_time = models.TimeField()
@@ -37,9 +38,9 @@ class Reservation(models.Model):
     online_event = models.BooleanField()
     description = models.CharField()
 
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.UUIDField()
-    content_object = GenericForeignKey('content_type', 'object_id')
+    # content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    # object_id = models.UUIDField()
+    # content_object = GenericForeignKey('content_type', 'object_id')
 
 
 class ReservationBooking(models.Model):
@@ -52,7 +53,7 @@ class ReservationBooking(models.Model):
 
     reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, default=None)
     customer_name = models.CharField()
-    email = models.EmailField()
+    email = models.EmailField(unique=True, default=None)
     alpha_numeric = models.CharField()
     QR_code = models.TextField()
     start_date = models.DateField()
