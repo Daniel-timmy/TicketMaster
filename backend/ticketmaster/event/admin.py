@@ -13,7 +13,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'event_name',
-        'tickets',
+        'ticket_data',
         'start_date',
         'start_time',
         'end_date',

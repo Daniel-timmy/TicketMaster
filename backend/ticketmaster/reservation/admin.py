@@ -16,6 +16,7 @@ class ReservationAdmin(admin.ModelAdmin):
         "id",
         "reservation_name",
         "groups",
+        'ticket_data',
         "spaces_per_group",
         "recurring_event",
         "start_date",
