@@ -1,8 +1,9 @@
 import uuid
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from knox.models import User
 
 """
 Defines the model for event
@@ -17,11 +18,10 @@ class Event(models.Model):
     """
     id = models.UUIDField(default=uuid.uuid4, unique=True,
                           primary_key=True, editable=False)
-    # creator = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, default=None, on_delete=models.CASCADE)
     event_name = models.CharField(max_length=100)
     ticket_data = ArrayField(
         models.JSONField(), default=None)
-    email = models.EmailField(unique=True, default=None)
     start_date = models.DateField(default=None)
     start_time = models.TimeField(default=None)
     end_date = models.DateField(default=None)

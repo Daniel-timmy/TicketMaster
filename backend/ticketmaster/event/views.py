@@ -2,8 +2,7 @@ import copy
 import uuid
 
 from django.contrib.auth import get_user_model, get_user
-from django.db import transaction
-from django.utils.dateparse import parse_date, parse_time
+
 from rest_framework import generics
 from rest_framework.response import Response
 
@@ -32,23 +31,6 @@ class EventList(generics.ListAPIView):
         return Event.objects.filter(creator=self.request.user)
 
 
-def generate_ticket_data(no_of_tickets):
-    """
-
-    :param no_of_tickets: number of tickets required by the user for the event
-    :return: list of ticket with the following information
-    ticket_id, available, and attendee_id
-    """
-    ticket_list = []
-
-    for i in range(0, int(no_of_tickets)):
-        t_data = {"ticket_id": uuid.uuid4(),
-                  "available": True,
-                  "attendee_id": None}
-        ticket_list.append(t_data)
-    return ticket_list
-
-
 class EventCreate(generics.CreateAPIView):
     """
     EventCreate class defines an API endpoint for handling HTTP POST for creating a new event and
@@ -57,7 +39,7 @@ class EventCreate(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EventSerializer
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         """
 
         :param request:
@@ -66,25 +48,13 @@ class EventCreate(generics.CreateAPIView):
         :return:
         """
         data = copy.deepcopy(request.data)
-        print(request.data)
-        # no_of_tickets = data.pop('no_of_tickets')[0]
-        # total_cost = data.pop('total_cost', None)
-        # stripe_token = data.pop('stripe_token', None)
-        # ticket_data = generate_ticket_data(no_of_tickets)
-        # data['ticket_data'] = ticket_data
-        user = get_user(request=request)
-        data['email'] = user.email
-        print(data)
 
-        serializer = self.get_serializer(data=data)
-        print(type(serializer))
+        serializer = self.get_serializer(data=data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
-            print(serializer.is_valid(raise_exception=True))
             instance = serializer.save()
             return Response({'message': 'Event creation sucessful'})
 
         return Response({'message': 'Event creation failed'})
-
 
 
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):

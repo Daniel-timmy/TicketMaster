@@ -15,6 +15,7 @@ class EventAdmin(admin.ModelAdmin):
         'event_name',
         'ticket_data',
         'start_date',
+        'creator',
         'start_time',
         'end_date',
         'end_time',

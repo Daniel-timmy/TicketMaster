@@ -1,8 +1,11 @@
+import copy
 import uuid
 
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
+from rest_framework.response import Response
+
 from .models import Reservation, ReservationBooking
 from .serializer import ReservationSerializer, ReservationBookingSerializer
 from .permissions import IsCreatorOrReadOnly
@@ -10,22 +13,6 @@ from .permissions import IsCreatorOrReadOnly
 """
 This module define the CRUD operations of the API for reservation
 """
-
-
-def generate_ticket_data(no_of_tickets):
-    """
-
-    :param no_of_tickets: number of tickets required by the user for the event
-    :return: list of ticket with the following information
-    ticket_id, available, and attendee_id
-    """
-    ticket_list = []
-    for i in range(no_of_tickets):
-        t_data = {"ticket_id": uuid.uuid4(),
-                  "available": True,
-                  "attendee_id": None}
-        ticket_list.append(t_data)
-    return ticket_list
 
 
 class ReservationList(generics.ListAPIView):
@@ -51,19 +38,22 @@ class ReservationCreate(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ReservationSerializer
 
-    def perform_create(self, serializer):
+    def post(self, request, *args, **kwargs):
         """
-        This method is called when a new resource instance is being created.
-        It prepares necessary data and saves the instance using the provided serializer.
 
-        :param serializer:Serializer instance. Used for validating and saving data.
-        :return: None
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
         """
-        data = self.request.data.copy()
-        no_of_tickets = int(data['no_of_tickets'])
-        with transaction.atomic():
-            ticket_data = generate_ticket_data(no_of_tickets)
-            serializer.save(ticket_data=ticket_data)
+        data = copy.deepcopy(request.data)
+
+        serializer = self.get_serializer(data=data, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            instance = serializer.save()
+            return Response({'message': 'Event creation sucessful'})
+
+        return Response({'message': 'Event creation failed'})
 
 
 class ReservationDetail(generics.RetrieveUpdateDestroyAPIView):
