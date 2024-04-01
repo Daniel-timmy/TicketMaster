@@ -45,7 +45,6 @@ class CreatorRegistration(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        print(user.email)
         return Response({
             'user': CreatorSerializer(user, context=self.get_serializer_context()).data,
             'token': AuthToken.objects.create(user)[1]

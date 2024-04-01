@@ -15,9 +15,9 @@ class EventSerializer(serializers.ModelSerializer):
     serializer for handling serialization
     and deserialization of event data.
     """
-    total_cost = serializers.DecimalField(max_digits=6, decimal_places=2)
-    stripe_token = serializers.CharField(max_length=200)
-    no_of_tickets = serializers.IntegerField()
+    total_cost = serializers.DecimalField(max_digits=6, decimal_places=2, required=False, read_only=True)
+    stripe_token = serializers.CharField(max_length=200, required=False, read_only=True)
+    no_of_tickets = serializers.IntegerField(required=False, read_only=True)
 
     class Meta:
         model = Event
@@ -112,3 +112,26 @@ class EventListSerializer(serializers.ModelSerializer):
                   'event_booking',
                   )
 
+
+class EventCreateSerializer(serializers.ModelSerializer):
+    """
+    EventSerializer class defines a
+    serializer for handling serialization
+    and deserialization of event data.
+    """
+
+    class Meta:
+        model = Event
+        fields = ('id',
+                  'event_name',
+                  'start_date',
+                  'start_time',
+                  'end_date',
+                  'end_time',
+                  'venue_name',
+                  'venue_address',
+                  'venue_country',
+                  'online_event',
+                  'recurring_event',
+                  'description',
+                  )

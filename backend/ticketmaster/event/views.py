@@ -1,5 +1,7 @@
+import copy
 import uuid
 
+from django.contrib.auth import get_user_model, get_user
 from django.db import transaction
 from django.utils.dateparse import parse_date, parse_time
 from rest_framework import generics
@@ -55,24 +57,6 @@ class EventCreate(generics.CreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = EventSerializer
 
-    # def perform_create(self, serializer):
-    #     """
-    #     This method is called when a new resource instance is being created.
-    #     It prepares necessary data and saves the instance using the provided serializer.
-    #
-    #     :param serializer:Serializer instance. Used for validating and saving data.
-    #     :return: None
-    #     """
-    #     data = self.request.data.copy()
-    #     no_of_tickets = data.pop('no_of_tickets')[0]
-    #     total_cost = data.pop('total_cost', None)
-    #     stripe_token = data.pop('stripe_token', None)
-    #
-    #     with transaction.atomic():
-    #         ticket_data = generate_ticket_data(no_of_tickets)
-    #         print(data)
-    #         serializer.save(ticket_data=ticket_data)
-
     def create(self, request, *args, **kwargs):
         """
 
@@ -81,20 +65,27 @@ class EventCreate(generics.CreateAPIView):
         :param kwargs:
         :return:
         """
-        data = self.request.data.copy()
-        no_of_tickets = data['no_of_tickets'][0]
-        total_cost = data['total_cost']
-        stripe_token = data['stripe_token']
-        # data.pop('csrfmiddlewaretoken')
-        ticket_data = generate_ticket_data(no_of_tickets)
-        data['ticket_data'] = ticket_data
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer=serializer)
-        # event = serializer.save()
+        data = copy.deepcopy(request.data)
+        print(request.data)
+        # no_of_tickets = data.pop('no_of_tickets')[0]
+        # total_cost = data.pop('total_cost', None)
+        # stripe_token = data.pop('stripe_token', None)
+        # ticket_data = generate_ticket_data(no_of_tickets)
+        # data['ticket_data'] = ticket_data
+        user = get_user(request=request)
+        data['email'] = user.email
+        print(data)
 
-        return Response({'message': 'Event creation sucessful'})
-            
+        serializer = self.get_serializer(data=data)
+        print(type(serializer))
+        if serializer.is_valid(raise_exception=True):
+            print(serializer.is_valid(raise_exception=True))
+            instance = serializer.save()
+            return Response({'message': 'Event creation sucessful'})
+
+        return Response({'message': 'Event creation failed'})
+
+
 
 class EventDetail(generics.RetrieveUpdateDestroyAPIView):
     """
