@@ -18,13 +18,12 @@ class CreatorProfileManager(BaseUserManager):
 
     def create(self, email, password, **extra_fields):
         """
+        Creates a new user with the given email and password.
 
-        :param name:
-        :param company_name:
-        :param self:
-        :param email:
-        :param password:
-        :return:
+        :param email: The email address of the new user.
+        :param password: The password for the new user.
+        :param extra_fields: Additional fields for the user.
+        :return: The newly created user.
         """
         if not email:
             raise ValueError('Email address required')
@@ -36,10 +35,10 @@ class CreatorProfileManager(BaseUserManager):
     def create_superuser(self, email, password, **extra_fields):
         """
          Create and save a SuperUser with the given email and password.
-        :param email:
-        :param password:
-        :param extra_fields:
-        :return:
+        :param email: The email address of the new superuser.
+        :param password: The password for the new superuser.
+        :param extra_fields: Additional fields for the superuser.
+        :return: The newly created superuser.
         """
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
