@@ -15,10 +15,10 @@ class IsCreatorOrReadOnly(permissions.BasePermission):
         """
         Defines Read-only permissions are allowed for any request
         Write permissions are only allowed to the creator of an event
-        :param request:
-        :param view:
-        :param obj:
-        :return:
+        :param request: The current request instance.
+        :param view: The view that the request was made to.
+        :param obj: The object that the request is for.
+        :return: True if the request has the necessary permissions, False otherwise.
         """
         if request.method in permissions.SAFE_METHODS:
             return True

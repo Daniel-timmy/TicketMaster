@@ -13,13 +13,6 @@ class CreatorSerializer(serializers.ModelSerializer):
     and deserialization of creators data.
     """
 
-    # events = serializers.PrimaryKeyRelatedField(
-    #     many=True, queryset=Events.objects.all())
-
-    # reservations = serializers.PrimaryKeyRelatedField(
-    #     many=True, queryset=Reservations.objects.all()
-    #     )
-
     class Meta:
         model = Creator
         fields = (
